@@ -42,14 +42,14 @@ const Cert1 = () => {
 
   return (
     <>
-      <ReactToPdf targetRef={ref} filename="div-blue.pdf" options={options}>
+      {/* <ReactToPdf targetRef={ref} filename="div-blue.pdf" options={options}>
         {({ toPdf }) => {
           for (let i = 0; i < data.length; ++i) {
             toPdf();
             setIndex(i);
           }
         }}
-      </ReactToPdf>
+      </ReactToPdf> */}
       <Wrapper ref={ref}>
         <Circle1 className="circle" />
         <Circle2 className="circle" />
