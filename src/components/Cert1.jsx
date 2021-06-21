@@ -3,7 +3,10 @@ import styled from "styled-components";
 import { Flex } from "../GlobalComponents";
 import ReactToPdf from "react-to-pdf";
 import { useState } from "react";
-
+import { Button } from "react-bootstrap";
+import jsPDF from "jspdf";
+import MyDocument from "./Reactpdf";
+import ReactPDF from "@react-pdf/renderer";
 const data = [
   {
     name: "Tanishq Ahluwalia",
@@ -37,20 +40,28 @@ const Cert1 = () => {
   const options = {
     orientation: "landscape",
     unit: "in",
-    format: [6.25, 10],
+    format: [8, 12],
   };
+  const generate = () => {
+    // let doc = new jsPDF("l", "px", [816, 1152]);
+    // doc.html(document.getElementById("component"), {
+    //   callback: function (pdf) {
+    //     pdf.save("pdfdoc");
+    //   },
+    //   ...options,
+    // });
 
+    ReactPDF.render(<MyDocument />, `example.pdf`);
+  };
   return (
     <>
       {/* <ReactToPdf targetRef={ref} filename="div-blue.pdf" options={options}>
-        {({ toPdf }) => {
-          for (let i = 0; i < data.length; ++i) {
-            toPdf();
-            setIndex(i);
-          }
-        }}
+        {({ toPdf }) => <Button onClick={() => toPdf()}>Download</Button>}
       </ReactToPdf> */}
-      <Wrapper ref={ref}>
+
+      <Button onClick={generate}>Generate</Button>
+
+      <Wrapper ref={ref} id="component">
         <Circle1 className="circle" />
         <Circle2 className="circle" />
 
@@ -63,7 +74,7 @@ const Cert1 = () => {
 
             <Flex direction="column" className="mt-5 mb-3">
               <Text>This acknowledges that</Text>
-              <Name>{data[index]}</Name>
+              <Name>{data[index].name}</Name>
               <Text>
                 has succesfully completed <Bold>graphic design internship</Bold>
               </Text>
@@ -147,10 +158,10 @@ const Wrapper = styled.div`
   font-family: "Poppins", sans-serif;
   position: relative;
   overflow: hidden;
-  margin: auto;
-  height: 600px;
-  width: 1000px;
-  margin: 3rem auto;
+
+  height: 816px;
+  width: 1152px;
+
   padding: 1rem;
   .circle {
     position: absolute;
