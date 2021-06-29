@@ -5,7 +5,7 @@ import { Colors } from "../../resources/resources";
 const Navbar = () => {
   return (
     <>
-      <Container fluid>
+      <Container fluid className="m-0 p-0">
         <Nav>
           <NavHeading>Certi.co</NavHeading>
           <ButtonSecondary>Login &nbsp;&nbsp;&nbsp;{"   >"}</ButtonSecondary>
@@ -44,5 +44,6 @@ const Nav = styled.nav`
   z-index: 1;
   justify-content: space-between;
   width: 100%;
+  max-width: ${window.innerWidth}px;
   padding: 1rem 4rem;
 `;

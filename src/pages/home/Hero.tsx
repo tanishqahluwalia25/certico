@@ -3,6 +3,7 @@ import bg_lg from "../../assets/hero_bg_lg.svg";
 import { Container, Row, Col } from "react-bootstrap";
 import { Colors, Images } from "../../resources/resources";
 import cert_illus from "../../assets/cert_illus.svg";
+import CertificateIllustration from "../../components/home/CertificateIllustration";
 
 const Hero = () => {
   return (
@@ -24,7 +25,8 @@ const Hero = () => {
             </Col>
 
             <Col md={5}>
-              <CertIllustration src={cert_illus} />
+              {/* <CertIllustration src={cert_illus} /> */}
+              <CertificateIllustration />
             </Col>
           </Row>
         </Container>

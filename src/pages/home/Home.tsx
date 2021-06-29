@@ -18,6 +18,6 @@ export default Home;
 
 const HomeContainer = styled.main`
   width: 100vw;
-  overflow: hidden;
+  /* overflow: hidden; */
   height: auto;
 `;
