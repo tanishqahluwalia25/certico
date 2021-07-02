@@ -50,25 +50,41 @@ const Edit = () => {
   const sign1Ref = useRef(null);
   const sign2Ref = useRef(null);
   const csvRef = useRef(null);
-
+  const [response, setResponse] = useState("");
   const handleSubmit = () => {
-    const form = new FormData();
-    form.append("logo", values.logo);
-    form.append("sign", values.sign1);
-    form.append("names", values.names);
+    const formData = new FormData();
+    formData.append("logo", values.logo);
+    formData.append("sign", values.sign1);
+    formData.append("names", values.names);
+    formData.append("name", "bye");
 
+    formData.forEach((item) => console.debug(item));
     axios
-      .post("http://localhost:4000/uploading-data", {
-        data: form,
-        header: {
-          "Content-Type": "multipart/form-data",
-        },
+      .post("http://localhost:4000/uploading-data", formData, {})
+      .then((r) => {
+        setResponse(r.data);
+
+        console.log(response);
       })
-      .then((r) => alert("done"))
       .catch((e) => alert(e));
   };
   return (
-    <div>
+    <div
+    // action="http://localhost:4000/uploading-data"
+    // method="POST"
+    // encType="multipart/form-data"
+    >
+      <iframe
+        srcDoc={`
+      
+      <html>
+
+          ${response}
+      <html/>
+      `}
+        height="100%"
+        width="100%"
+      />
       <Flex>
         <div>
           {" "}
@@ -80,6 +96,7 @@ const Edit = () => {
           >
             <InputLogo
               type="file"
+              name="logo"
               onChange={(e) => {
                 console.log(e.target.files);
                 handleFileChange(e);
@@ -97,6 +114,7 @@ const Edit = () => {
           >
             <InputLogo
               type="file"
+              name="sign"
               onChange={(e) => {
                 console.log(e.target.files);
                 handleFileChange(e);
@@ -140,7 +158,11 @@ const Edit = () => {
             />
             Upload CSV File of Names
           </Button>
-          <Button onClick={handleSubmit} className="btn btn-outline-warning">
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            className="btn btn-outline-warning"
+          >
             Request Certificates in Zip file
           </Button>
           <Design>
@@ -165,6 +187,7 @@ const Edit = () => {
                 onChange={(e) => handleChange(e)}
                 placeholder="Name"
                 id="name"
+                name="names"
                 value={values.name}
               />
               <p className="text-info px-4 mt-n2 mb-5">
