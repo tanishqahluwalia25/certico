@@ -46,6 +46,7 @@ const Edit = () => {
     console.log(values);
   };
 
+
   const logoRef = useRef(null);
   const sign1Ref = useRef(null);
   const sign2Ref = useRef(null);
@@ -53,18 +54,24 @@ const Edit = () => {
   const [response, setResponse] = useState("");
   const handleSubmit = () => {
     const formData = new FormData();
-    formData.append("logo", values.logo);
-    formData.append("sign", values.sign1);
-    formData.append("names", values.names);
-    formData.append("name", "bye");
+    const logo = document.querySelector('#logo');
+    const sign1 = document.querySelector('#sign1');
+    const names = document.querySelector('#names');
+    formData.append("logo", (logo as any)?.files[0]);
+    formData.append("sign1", (sign1 as any)?.files[0]);
+    formData.append("names", (names as any)?.files[0]);
+    // formData.append("name", "bye");
 
     formData.forEach((item) => console.debug(item));
     axios
-      .post("http://localhost:4000/uploading-data", formData, {})
+      .post("http://localhost:4000/pdf", formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
       .then((r) => {
         setResponse(r.data);
-
-        console.log(response);
+        console.log(r);
       })
       .catch((e) => alert(e));
   };
@@ -88,6 +95,7 @@ const Edit = () => {
       <Flex>
         <div>
           {" "}
+          <a href="http://localhost:4000/static/Uploads/cert.zip" download>click</a>
           <Button
             onClick={(e: any) => {
               logoRef.current && (logoRef.current as any).click();
