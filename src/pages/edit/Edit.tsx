@@ -187,7 +187,7 @@ const Edit = () => {
                 onChange={(e) => handleChange(e)}
                 placeholder="Name"
                 id="name"
-                name="names"
+                name="name"
                 value={values.name}
               />
               <p className="text-info px-4 mt-n2 mb-5">
