@@ -26,10 +26,10 @@ const Edit = () => {
     of: "Certificate of Appreciation",
     content:
       "Lorem ipsum dolor sit amet consectetur adipisicing elit. Sit quod non quam vero consequatur ab modi fuga cupiditate numquam. Adipisci!",
-    design1: "",
-    design2: "",
-    prez1: "",
-    prez2: "",
+    design1: "prez",
+    design2: "prez",
+    prez1: "Tan",
+    prez2: "Tan",
     logo: "",
     sign1: "",
     sign2: "",
@@ -55,7 +55,7 @@ const Edit = () => {
   const csvRef = useRef(null);
   const [response, setResponse] = useState<string>("");
   const [formData, setFormData] = useState(new FormData());
-
+  const [download, setDownload] = useState(false);
   const handleSubmit = () => {
     const formData = new FormData();
     const logo = document.querySelector("#logo");
@@ -69,121 +69,118 @@ const Edit = () => {
     formData.append("names", (names as any)?.files[0]);
 
     formData.append("of", values.of);
+    formData.append("to", values.to);
     formData.append("design1", values.design1);
     formData.append("design2", values.design2);
     formData.append("prez1", values.prez1);
     formData.append("prez2", values.prez2);
     formData.append("content", values.content);
+    formData.append("userID", "tan");
 
     formData.forEach((item) => console.debug(item));
     axios
-      .post("http://localhost:4000/pdf", formData, {
+      .post("https://whispering-cliffs-75293.herokuapp.com/pdf", formData, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
       })
       .then((r) => {
         setResponse(r.data);
-        console.log(r);
+        setDownload(true);
+        // alert("Kindly Download the Certificates");
       })
       .catch((e) => alert(e));
   };
   return (
     <div>
-      <iframe
-        srcDoc={`
-      
-      <html>
-
-          ${response}
-      <html/>
-      `}
-        height="100%"
-        width="100%"
-      />
       <Flex>
         <div>
           {" "}
-          <a href={response} download>
-            click
-          </a>
-          <Button
-            onClick={(e: any) => {
-              logoRef.current && (logoRef.current as any).click();
-            }}
-            className="btn btn-outline-primary small"
-          >
-            <InputLogo
-              type="file"
-              name="logo"
-              onChange={(e) => {
-                console.log(e.target.files);
-                handleFileChange(e);
-              }}
-              id="logo"
-              ref={logoRef}
-            />
-            Upload Logo
-          </Button>
-          <Button
-            onClick={(e: any) => {
-              sign1Ref.current && (sign1Ref.current as any).click();
-            }}
-            className="btn btn-outline-primary small"
-          >
-            <InputLogo
-              type="file"
-              name="sign"
-              onChange={(e) => {
-                console.log(e.target.files);
-                handleFileChange(e);
-              }}
-              id="sign1"
-              ref={sign1Ref}
-            />
-            Upload Signature 1
-          </Button>
-          <Button
-            onClick={(e: any) => {
-              sign2Ref.current && (sign2Ref.current as any).click();
-            }}
-            className="btn btn-outline-primary small"
-          >
-            <InputLogo
-              type="file"
-              onChange={(e) => {
-                console.log(e.target.files);
-                handleFileChange(e);
-              }}
-              id="sign2"
-              ref={sign2Ref}
-            />
-            Upload Signature 2
-          </Button>
-          <Button
-            onClick={(e: any) => {
-              csvRef.current && (csvRef.current as any).click();
-            }}
-            className="btn btn-outline-success small"
-          >
-            <InputLogo
-              type="file"
-              onChange={(e) => {
-                console.log(e.target.files);
-                handleFileChange(e);
-              }}
-              id="names"
-              ref={csvRef}
-            />
-            Upload CSV File of Names
-          </Button>
-          <Button
-            onClick={handleSubmit}
-            type="submit"
-            className="btn btn-outline-warning"
-          >
-            Request Certificates in Zip file
-          </Button>
+          {download && response ? (
+            <a href={response} className="btn btn-success px-5 my-2 mx-5" download>
+              Download Certificates
+            </a>
+          ) : (
+            <>
+              <Button
+                onClick={(e: any) => {
+                  logoRef.current && (logoRef.current as any).click();
+                }}
+                className="btn btn-outline-primary small"
+              >
+                <InputLogo
+                  type="file"
+                  name="logo"
+                  onChange={(e) => {
+                    console.log(e.target.files);
+                    handleFileChange(e);
+                  }}
+                  id="logo"
+                  ref={logoRef}
+                />
+                Upload Logo
+              </Button>
+              <Button
+                onClick={(e: any) => {
+                  sign1Ref.current && (sign1Ref.current as any).click();
+                }}
+                className="btn btn-outline-primary small"
+              >
+                <InputLogo
+                  type="file"
+                  name="sign"
+                  onChange={(e) => {
+                    console.log(e.target.files);
+                    handleFileChange(e);
+                  }}
+                  id="sign1"
+                  ref={sign1Ref}
+                />
+                Upload Signature 1
+              </Button>
+              <Button
+                onClick={(e: any) => {
+                  sign2Ref.current && (sign2Ref.current as any).click();
+                }}
+                className="btn btn-outline-primary small"
+              >
+                <InputLogo
+                  type="file"
+                  onChange={(e) => {
+                    console.log(e.target.files);
+                    handleFileChange(e);
+                  }}
+                  id="sign2"
+                  ref={sign2Ref}
+                />
+                Upload Signature 2
+              </Button>
+              <Button
+                onClick={(e: any) => {
+                  csvRef.current && (csvRef.current as any).click();
+                }}
+                className="btn btn-outline-success small"
+              >
+                <InputLogo
+                  type="file"
+                  onChange={(e) => {
+                    console.log(e.target.files);
+                    handleFileChange(e);
+                  }}
+                  id="names"
+                  ref={csvRef}
+                />
+                Upload CSV File of Names
+              </Button>
+              <Button
+                onClick={handleSubmit}
+                type="submit"
+                className="btn btn-outline-warning"
+              >
+                Request Certificates in Zip file
+              </Button>
+            </>
+          )}
           <Design>
             <Img src={cert} />
 
