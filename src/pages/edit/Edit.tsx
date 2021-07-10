@@ -3,21 +3,24 @@ import { Flex } from "../../GlobalComponents";
 import cert from "../../assets/cert.png";
 import { useRef, useState } from "react";
 import axios from "axios";
+
+interface valuesInterface {
+  logo: any;
+  name: string;
+  names: any;
+  to: string;
+  of: string;
+  design1: string;
+  content: string;
+  design2: string;
+  prez1: string;
+  prez2: string;
+  sign1: any;
+  sign2: any;
+}
+
 const Edit = () => {
-  const [values, setValues] = useState<{
-    logo: any;
-    name: string;
-    names: any;
-    to: string;
-    of: string;
-    design1: string;
-    content: string;
-    design2: string;
-    prez1: string;
-    prez2: string;
-    sign1: any;
-    sign2: any;
-  }>({
+  const [values, setValues] = useState<valuesInterface>({
     name: "John Doe",
     to: "Awarded to",
     of: "Certificate of Appreciation",
@@ -46,28 +49,38 @@ const Edit = () => {
     console.log(values);
   };
 
-
   const logoRef = useRef(null);
   const sign1Ref = useRef(null);
   const sign2Ref = useRef(null);
   const csvRef = useRef(null);
-  const [response, setResponse] = useState("");
+  const [response, setResponse] = useState<string>("");
+  const [formData, setFormData] = useState(new FormData());
+
   const handleSubmit = () => {
     const formData = new FormData();
-    const logo = document.querySelector('#logo');
-    const sign1 = document.querySelector('#sign1');
-    const names = document.querySelector('#names');
+    const logo = document.querySelector("#logo");
+    const sign1 = document.querySelector("#sign1");
+    const sign2 = document.querySelector("#sign2");
+    const names = document.querySelector("#names");
+
     formData.append("logo", (logo as any)?.files[0]);
     formData.append("sign1", (sign1 as any)?.files[0]);
+    formData.append("sign2", (sign2 as any)?.files[0]);
     formData.append("names", (names as any)?.files[0]);
-    // formData.append("name", "bye");
+
+    formData.append("of", values.of);
+    formData.append("design1", values.design1);
+    formData.append("design2", values.design2);
+    formData.append("prez1", values.prez1);
+    formData.append("prez2", values.prez2);
+    formData.append("content", values.content);
 
     formData.forEach((item) => console.debug(item));
     axios
       .post("http://localhost:4000/pdf", formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
+          "Content-Type": "multipart/form-data",
+        },
       })
       .then((r) => {
         setResponse(r.data);
@@ -76,11 +89,7 @@ const Edit = () => {
       .catch((e) => alert(e));
   };
   return (
-    <div
-    // action="http://localhost:4000/uploading-data"
-    // method="POST"
-    // encType="multipart/form-data"
-    >
+    <div>
       <iframe
         srcDoc={`
       
@@ -95,7 +104,9 @@ const Edit = () => {
       <Flex>
         <div>
           {" "}
-          <a href="http://localhost:4000/static/Uploads/cert.zip" download>click</a>
+          <a href={response} download>
+            click
+          </a>
           <Button
             onClick={(e: any) => {
               logoRef.current && (logoRef.current as any).click();
@@ -344,21 +355,6 @@ const Logo = styled.img`
 const Sign = styled.img`
   width: 100px;
 `;
-
-// const FileUploader = ({onFileSelect}:any) => {
-//     const fileInput = useRef(null)
-
-//     const handleFileInput = (e:any) => {
-//         onFileSelect(e.target.files[0])
-//     }
-
-//     return (
-//         <div className="file-uploader">
-//             <input type="file" onChange={handleFileInput}/>
-//             <button onClick={e => fileInput.current && fileInput.current.click()} className="btn btn-outline-primary"/>
-//         </div>
-//     )
-// }
 
 const Button = styled.button`
   margin: 10px 10px;
